@@ -1,0 +1,61 @@
+Original instructions but they  create syntax error
+
+
+html5 chat and wowonder script
+ March 25, 2019  admin  CMS
+How to integrate html5 chat with social wowonder script ?
+
+Edit .htaccess and add that line
+
+RewriteRule ^html5-chat$ index.php?link1=html5-chat [NC,QSA]
+ 
+
+Edit index.php and add these lines
+
+case 'html5-chat':
+    include('sources/html5-chat.php');
+    break;
+ 
+
+create sources/html5-chat.php  :
+
+ 
+
+<?php if (empty($wo['user'])) {
+    header("Location: " . Wo_SeoLink('index.php?link1=welcome'));
+    exit();
+}
+$webmasterid = YOUR_WEBMASTERID;
+$password = 'YOUR_SCRIPT_CHAT_PASSWORD';
+$user = array(
+    'id'=>$wo['user']['user_id'],
+    'username'=>$wo['user']['username'],
+    'image'=>base64_encode($wo['user']['avatar']),
+    'gender'=>$wo['user']['gender'],
+    'role'=>($wo['user']['admin']==1)?'admin':'user';
+    'password'=>$password
+);
+$encrypted = file_get_contents("https://html5-chat.com/protect/".base64_encode(json_encode($user)));
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+</head>
+<body>
+    <script src="https://html5-chat.com/script/<?=$webmasterid?>/<?=$encrypted?>"></script>
+</body>
+</html>
+<?php exit();?>
+Just change these 2 parameters:
+
+YOUR_WEBMASTERID : your script webmasterid
+
+YOUR_SCRIPT_CHAT_PASSWORD : your script password
+
+then navigate to : https://www.yoursite.com/html5-chat.php
+
+Regards
+
+Related posts:
